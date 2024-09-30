@@ -5,7 +5,7 @@ author        = "Bramandityo"
 description   = "VM manager based on NVMM + Qemu and patient"
 license       = "BSD-3-Clause"
 srcDir        = "src"
-bin           = @["vmin"]
+bin           = @["vmin.bin"]
 
 
 # Dependencies
