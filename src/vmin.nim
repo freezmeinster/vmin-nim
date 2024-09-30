@@ -1,3 +1,8 @@
+import os
+import vmin/ls
+
+const NimblePkgVersion {.strdefine.} = "Unknown"
+
 const Help = """
 vmin - Virtual Machine Manager build with NVMM + Qemu and lot of patient 
 
@@ -17,8 +22,31 @@ Options:
 """
 
 proc main() =
-  echo Help
-  quit 1
+  try:
+    case paramCount():
+    of 0:
+      echo Help
+      quit 1
+    of 1:
+      case paramStr(1)
+      of "-h", "--help":
+        echo Help
+        quit 1
+      of "ls":
+        ls()
+      of "-v", "--version":
+        echo NimblePkgVersion
+      else:
+        echo Help
+        quit 1
+    else:
+      echo Help
+      quit 1
+  except CatchableError, Defect:
+    let ex = getCurrentException()
+    echo ex.msg
+    echo ex.getStackTrace()
+    quit 1
 
 when isMainModule:
   main()
