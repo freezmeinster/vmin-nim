@@ -13,3 +13,4 @@ bin           = @["vmin.bin"]
 requires "nim >= 2.0.4"
 requires "nancy"
 requires "termstyle"
+requires "parsetoml"
