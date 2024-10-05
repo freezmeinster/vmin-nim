@@ -3,6 +3,8 @@ import vmin/ls
 import vmin/detail
 import vmin/config
 
+{.passL: "-ldialog -lncursesw".}
+
 const NimblePkgVersion {.strdefine.} = "Unknown"
 
 const Help = """
