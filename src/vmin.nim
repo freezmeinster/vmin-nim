@@ -2,8 +2,9 @@ import os
 import vmin/ls
 import vmin/detail
 import vmin/config
+import vmin/create
 
-{.passL: "-ldialog -lncursesw".}
+{.passL: "-liconv".}
 
 const NimblePkgVersion {.strdefine.} = "Unknown"
 
@@ -40,6 +41,8 @@ proc main() =
         quit 1
       of "ls":
         ls()
+      of "create":
+        create()
       of "-v", "--version":
         echo NimblePkgVersion
       else:
