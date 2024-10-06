@@ -1,5 +1,6 @@
 import os
 import vmin/ls
+import vmin/utils
 import vmin/detail
 import vmin/config
 import vmin/create
@@ -62,15 +63,19 @@ proc main() =
         let vmname = paramStr(2)
         detail(vmname)
       of "install":
+        requireRoot()
         let vmname = paramStr(2)
         install(vmname)
       of "start":
+        requireRoot()
         let vmname = paramStr(2)
         detail(vmname)
       of "stop":
+        requireRoot()
         let vmname = paramStr(2)
         detail(vmname)
       of "restart":
+        requireRoot()
         let vmname = paramStr(2)
         detail(vmname)
     else:
