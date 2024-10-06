@@ -1,6 +1,7 @@
 import os
+import std/terminal
 
 proc requireRoot*() =
   if not isAdmin():
-    echo "Please run command as root"
+    styledEcho styleBright, fgRed, "Please run command as root !!", resetStyle
     quit 1
