@@ -3,6 +3,8 @@ import vmin/ls
 import vmin/detail
 import vmin/config
 import vmin/create
+import vmin/destroy
+import vmin/install
 
 {.passL: "-liconv".}
 
@@ -50,12 +52,18 @@ proc main() =
         quit 1
     of 2:
       case paramStr(1)
+      of "destroy":
+        let vmname = paramStr(2)
+        destroy(vmname)
       of "config":
         let vmname = paramStr(2)
         config(vmname)
       of "status":
         let vmname = paramStr(2)
         detail(vmname)
+      of "install":
+        let vmname = paramStr(2)
+        install(vmname)
       of "start":
         let vmname = paramStr(2)
         detail(vmname)

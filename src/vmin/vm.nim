@@ -1,5 +1,7 @@
 import std/strutils
 import parsetoml
+import os
+import std/osproc
 
 type
   VM* = ref object
@@ -26,4 +28,28 @@ proc parse*(self: VM) =
   except CatchableError as e:
     echo e.msg
     quit 1
-  
+
+proc persistConfig*(self: VM) =
+  try:
+    let tb = newTTable()
+    tb.add("cpu", newTInt(parseInt(self.cpu)))
+    tb.add("memory", newTInt(parseInt(self.memory)))
+    tb.add("disk", newTInt(parseInt(self.disk)))
+    tb.add("vnc", newTInt(parseInt(self.vnc)))
+    tb.add("ip", newTString(self.ip))
+    tb.add("hostintf", newTString(self.hostintf))
+    tb.add("mac", newTString(self.mac))
+    let res = tb.toTomlString()
+    writeFile(self.path & "/config.toml", res)
+  except CatchableError as e:
+    echo e.msg
+    quit 1
+
+proc addDisk*(self: VM) = 
+  let diskpath = self.path & "/disk1.qcow2"
+  let disksize = $(self.disk)
+  if not fileExists(diskpath):
+    discard execProcess("qemu-img", 
+                       args=["create", "-f", "qcow2", diskpath, disksize&"G"],
+                       options={poUsePath,poStdErrToStdOut}
+                     )

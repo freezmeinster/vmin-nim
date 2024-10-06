@@ -1,10 +1,13 @@
 import os
+import vm
+import mac
 
 proc create*() =
   echo "Welcome to Vmin Virtual Machine Creator"
   write(stdout, "Are you sure want to continue ? [y/N] -> ") 
   var cont = readLine(stdin)
   var ok: array[2, string] = ["y", "Y"]
+  let newmac = genMac()
   if not (cont in ok):
     quit 1
   write(stdout, "Virtual Machine Name -> ") 
@@ -19,5 +22,13 @@ proc create*() =
   var ip = readLine(stdin)
   
   let vmpath = expandTilde("~/Vmdir/" & vmname)
-  if not existsDir(vmpath):
-    createDir(vmpath)
+  if not dirExists(vmpath):
+    createDir(vmpath) 
+ 
+  let vm = VM(
+    path: vmpath, name: vmname, cpu: cpu, memory: mem, mac: newmac, ip: ip,
+    hostintf: "tap9", disk: disk, vnc: "5902"
+  )
+
+  vm.persistConfig() 
+  vm.addDisk()
