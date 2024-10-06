@@ -7,7 +7,7 @@ import vmin/create
 import vmin/destroy
 import vmin/install
 
-{.passL: "-liconv".}
+#{.passL: "-liconv".}
 
 const NimblePkgVersion {.strdefine.} = "Unknown"
 
@@ -62,10 +62,6 @@ proc main() =
       of "status":
         let vmname = paramStr(2)
         detail(vmname)
-      of "install":
-        requireRoot()
-        let vmname = paramStr(2)
-        install(vmname)
       of "start":
         requireRoot()
         let vmname = paramStr(2)
@@ -78,6 +74,13 @@ proc main() =
         requireRoot()
         let vmname = paramStr(2)
         detail(vmname)
+    of 3:
+      case paramStr(1)
+      of "install":
+        requireRoot()
+        let vmname = paramStr(2)
+        let iso = paramStr(3)
+        install(vmname, iso)
     else:
       echo Help
       quit 1
