@@ -1,6 +1,7 @@
 import os
 import vm
 import mac
+import utils
 
 proc create*() =
   echo "Welcome to Vmin Virtual Machine Creator"
@@ -8,6 +9,8 @@ proc create*() =
   var cont = readLine(stdin)
   var ok: array[2, string] = ["y", "Y"]
   let newmac = genMac()
+  let newvnc = genVncPort()
+  let newintf = genHostInterface()
   if not (cont in ok):
     quit 1
   write(stdout, "Virtual Machine Name -> ") 
@@ -27,7 +30,7 @@ proc create*() =
  
   let vm = VM(
     path: vmpath, name: vmname, cpu: cpu, memory: mem, mac: newmac, ip: ip,
-    hostintf: "tap9", disk: disk, vnc: "5902"
+    hostintf: newintf , disk: disk, vnc: newvnc
   )
 
   vm.persistConfig() 

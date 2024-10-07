@@ -41,6 +41,8 @@ proc persistConfig*(self: VM) =
     tb.add("mac", newTString(self.mac))
     let res = tb.toTomlString()
     writeFile(self.path & "/config.toml", res)
+    if self.pid != "":
+      writeFile(self.path&"/pid", self.pid)
   except CatchableError as e:
     echo e.msg
     quit 1
