@@ -6,6 +6,8 @@ import vmin/config
 import vmin/create
 import vmin/destroy
 import vmin/install
+import vmin/setupdhcp
+import vmin/setupbase
 
 #{.passL: "-liconv".}
 
@@ -18,9 +20,9 @@ Usage:
   ls                => List available Virtual Machine
   detail [vname]    => Detail Virtual Machine
   config [vname]    => Configure Virtual Machine
-  setup-net         => Setup NetBSD Bridge and NAT
-  setup-base        => Setup Virtual Machine Directory
-  setup-dhcp        => Setup dnsmasq service 
+  setupnet         => Setup NetBSD Bridge and NAT
+  setupbase        => Setup Virtual Machine Directory
+  setupdhcp        => Setup dnsmasq service 
   create            => Create new VM
   start [vmname]    => Starting VM
   stop [vmname]     => Stoping VM
@@ -43,8 +45,15 @@ proc main() =
         echo Help
         quit 1
       of "ls":
+        checkBase()
         ls()
+      of "setupbase":
+        setupbase()
+      of "setupdhcp":
+        checkBase()
+        setupdhcp()
       of "create":
+        checkBase()
         create()
       of "-v", "--version":
         echo NimblePkgVersion
@@ -52,6 +61,7 @@ proc main() =
         echo Help
         quit 1
     of 2:
+      checkBase()
       case paramStr(1)
       of "destroy":
         let vmname = paramStr(2)
@@ -75,6 +85,7 @@ proc main() =
         let vmname = paramStr(2)
         detail(vmname)
     of 3:
+      checkBase()
       case paramStr(1)
       of "install":
         requireRoot()
