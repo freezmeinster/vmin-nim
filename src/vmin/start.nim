@@ -1,4 +1,4 @@
 
 
-proc destroy*(name: string) =
+proc start*(name: string) =
   echo "Destroy"

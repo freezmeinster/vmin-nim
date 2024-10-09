@@ -35,3 +35,4 @@ proc create*() =
 
   vm.persistConfig() 
   vm.addDisk()
+  vm.setDHCPConfig()

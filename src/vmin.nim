@@ -5,11 +5,13 @@ import vmin/detail
 import vmin/config
 import vmin/create
 import vmin/destroy
+import vmin/start
 import vmin/install
 import vmin/setupdhcp
 import vmin/setupbase
 
 #{.passL: "-liconv".}
+
 
 const NimblePkgVersion {.strdefine.} = "Unknown"
 
@@ -20,9 +22,9 @@ Usage:
   ls                => List available Virtual Machine
   detail [vname]    => Detail Virtual Machine
   config [vname]    => Configure Virtual Machine
-  setupnet         => Setup NetBSD Bridge and NAT
-  setupbase        => Setup Virtual Machine Directory
-  setupdhcp        => Setup dnsmasq service 
+  setupnet          => Setup NetBSD Bridge and NAT
+  setupbase         => Setup Virtual Machine Directory
+  setupdhcp         => Setup dnsmasq service 
   create            => Create new VM
   start [vmname]    => Starting VM
   stop [vmname]     => Stoping VM
@@ -75,7 +77,7 @@ proc main() =
       of "start":
         requireRoot()
         let vmname = paramStr(2)
-        detail(vmname)
+        start(vmname)
       of "stop":
         requireRoot()
         let vmname = paramStr(2)

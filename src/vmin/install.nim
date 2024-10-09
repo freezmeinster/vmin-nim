@@ -1,11 +1,11 @@
-import os 
 import std/strformat
 import vm
 import strutils
 import std/osproc
+import setupbase
 
 proc install*(name: string, iso: string) =
-  let vm = VM(path: expandTilde("~/Vmdir/" & name) )
+  let vm = VM(path: getConfig("vmdir")&"/"&name )
   vm.parse()
   let cpu = $(vm.cpu)
   let memory = $(vm.memory)
@@ -14,7 +14,7 @@ proc install*(name: string, iso: string) =
   let hostintf = vm.hostintf
   let mac = vm.mac
   
-  let runCmd = fmt"-accel nvmm -cpu max -smp cpus={cpu} -m {memory}G " &
+  let runCmd = fmt"-accel nvmm -boot d -cpu max -smp cpus={cpu} -m {memory}G " &
         fmt"-drive file={diskpath},if=none,id=hd0 " &
         "-device virtio-blk-pci,drive=hd0 " &
         "-object rng-random,filename=/dev/urandom,id=viornd0 " &
@@ -32,8 +32,7 @@ proc install*(name: string, iso: string) =
 
   discard execCmd(netifCmd)
   discard execCmd(brCmd)
-  var qm = startProcess("/usr/pkg/bin/qemu-system-x86_64", args=args)
+  let qm = startProcess(getConfig("qemu_bin"), args=args)
   vm.pid = $(qm.processID)
   vm.persistConfig()
-  echo runCmd
   discard execCmd(netifUpCmd)

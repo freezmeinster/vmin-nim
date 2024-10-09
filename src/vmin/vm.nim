@@ -2,14 +2,20 @@ import std/strutils
 import parsetoml
 import os
 import std/osproc
+import setupbase
+import std/strformat
 
 type
   VM* = ref object
     hostintf*, name*, memory*, disk*: string
     mac*, ip*, cpu*, vnc*, pid*, path*: string
 
+proc kill(pid: int, sig: int): int {.importc.}
+
 proc status*(self: VM): string =
-  return "Dead"
+  var st: int
+  st = kill(parseInt(self.pid), 0)
+  return $(st)
 
 proc parse*(self: VM) =
   let pt = self.path.split("/")
@@ -58,3 +64,12 @@ proc addDisk*(self: VM) =
                        args=["create", "-f", "qcow2", diskpath, disksize&"G"],
                        options={poUsePath,poStdErrToStdOut}
                      )
+
+proc setDHCPConfig*(self: VM) = 
+  let ip = self.ip
+  let mac= self.mac
+  let dnsmasq_dir = getConfig("dnsmasq_confdir")
+  let confdir = dnsmasq_dir&"/"&self.name
+  let cmd = fmt"""dhcp-host={mac},{ip}"""
+  writeFile(confdir, cmd)
+  discard execCmd("service dnsmasq restart")

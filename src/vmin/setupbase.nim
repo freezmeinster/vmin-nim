@@ -41,9 +41,12 @@ bridge_interface="{br}"
 vether_interface="{vet}"
 baseip="{base}"
 dnsmasq_confdir="/usr/pkg/etc/dnsmasq.d"
-dnasmas_conf="/usr/pkg/etc/dnsmasq.conf"
+dnsmasq_conf="/usr/pkg/etc/dnsmasq.conf"
   """
   writeFile(conffile, conftxt)
+  if not dirExists(vmdir):
+    createDir(vmdir)
+
   styledEcho styleBright, fgGreen, "Configuring Done", resetStyle
 
 proc getConfig*(key: string): string = 
