@@ -28,9 +28,12 @@ proc install*(name: string, iso: string) =
   let netifUpCmd = fmt"""ifconfig {hostintf} up"""
   # let stopnetifCmd = fmt"""ifconfig {hostintf} destroy """
   let brCmd = fmt"""brconfig bridge0 add {hostintf}"""
+  discard execProcess(fmt"/dev/MAKEDEV {hostintf}", workingDir="/dev/" )
+
   discard execCmd(netifCmd)
   discard execCmd(brCmd)
   var qm = startProcess("/usr/pkg/bin/qemu-system-x86_64", args=args)
   vm.pid = $(qm.processID)
   vm.persistConfig()
+  echo runCmd
   discard execCmd(netifUpCmd)

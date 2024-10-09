@@ -17,6 +17,9 @@ proc parse*(self: VM) =
   let conffile = self.path & "/config.toml"
   try:
     let tb =  parsetoml.parseFile(conffile)
+    let pidfile = self.path & "/pid"
+    if fileExists(pidfile):
+      self.pid = readFile(pidfile);
     self.name = name
     self.memory = $(tb["memory"])
     self.mac = tb["mac"].getStr()
@@ -51,7 +54,7 @@ proc addDisk*(self: VM) =
   let diskpath = self.path & "/disk1.qcow2"
   let disksize = $(self.disk)
   if not fileExists(diskpath):
-    discard execProcess("qemu-img", 
+    discard execProcess("/usr/pkg/bin/qemu-img", 
                        args=["create", "-f", "qcow2", diskpath, disksize&"G"],
                        options={poUsePath,poStdErrToStdOut}
                      )
