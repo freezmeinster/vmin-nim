@@ -1,4 +1,8 @@
+import vm
+import setupbase
 
-
-proc destroy*(name: string) =
-  echo "Destroy"
+proc stop*(name: string) =
+  let vm = VM(path: getConfig("vmdir")&"/"&name )
+  vm.parse()
+  vm.stopVM()
+  

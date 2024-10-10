@@ -1,9 +1,7 @@
 import os
-import osproc
 import std/terminal
 import std/algorithm
 import strutils
-import std/strformat
 import vm
 
 
@@ -25,7 +23,6 @@ proc scanVmDir*(): seq[VM] =
         continue
 
   return vmlist
-
 
 proc genVncPort*(): string =
   let vmlist = scanVmDir()
@@ -50,6 +47,3 @@ proc genHostInterface*(): string =
   let port = prt[prt.low] + 1
   return "tap" & $(port)
 
-proc getPIDFromName*(name: string): int =
-  let opt = execProcess(fmt"ps ax | grep qemu | grep 'name {name}'")
-  return opt.split(" ")[0]

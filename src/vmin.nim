@@ -6,6 +6,7 @@ import vmin/config
 import vmin/create
 import vmin/destroy
 import vmin/start
+import vmin/stop
 import vmin/install
 import vmin/setupdhcp
 import vmin/setupbase
@@ -81,11 +82,12 @@ proc main() =
       of "stop":
         requireRoot()
         let vmname = paramStr(2)
-        detail(vmname)
+        stop(vmname)
       of "restart":
         requireRoot()
         let vmname = paramStr(2)
-        detail(vmname)
+        stop(vmname)
+        start(vmname)
     of 3:
       checkBase()
       case paramStr(1)
