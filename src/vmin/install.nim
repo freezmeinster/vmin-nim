@@ -3,6 +3,7 @@ import vm
 import strutils
 import std/osproc
 import setupbase
+import utils
 
 proc install*(name: string, iso: string) =
   let vm = VM(path: getConfig("vmdir")&"/"&name )
@@ -14,7 +15,7 @@ proc install*(name: string, iso: string) =
   let hostintf = vm.hostintf
   let mac = vm.mac
   
-  let runCmd = fmt"-accel nvmm -boot d -cpu max -smp cpus={cpu} -m {memory}G " &
+  let runCmd = fmt"-name {name} -accel nvmm -boot d -cpu max -smp cpus={cpu} -m {memory}G " &
         fmt"-drive file={diskpath},if=none,id=hd0 " &
         "-device virtio-blk-pci,drive=hd0 " &
         "-object rng-random,filename=/dev/urandom,id=viornd0 " &

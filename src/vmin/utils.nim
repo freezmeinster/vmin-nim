@@ -1,7 +1,9 @@
 import os
+import osproc
 import std/terminal
 import std/algorithm
 import strutils
+import std/strformat
 import vm
 
 
@@ -47,3 +49,7 @@ proc genHostInterface*(): string =
   prt.sort()
   let port = prt[prt.low] + 1
   return "tap" & $(port)
+
+proc getPIDFromName*(name: string): int =
+  let opt = execProcess(fmt"ps ax | grep qemu | grep 'name {name}'")
+  return opt.split(" ")[0]

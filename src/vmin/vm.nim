@@ -13,9 +13,14 @@ type
 proc kill(pid: int, sig: int): int {.importc.}
 
 proc status*(self: VM): string =
+  if self.pid == "":
+    return "Dead"
   var st: int
   st = kill(parseInt(self.pid), 0)
-  return $(st)
+  if st == 0:
+    return "Running"
+  else:
+    return "Dead"
 
 proc parse*(self: VM) =
   let pt = self.path.split("/")
@@ -25,7 +30,8 @@ proc parse*(self: VM) =
     let tb =  parsetoml.parseFile(conffile)
     let pidfile = self.path & "/pid"
     if fileExists(pidfile):
-      self.pid = readFile(pidfile);
+      let pid = strip(readFile(pidfile))
+      self.pid = pid
     self.name = name
     self.memory = $(tb["memory"])
     self.mac = tb["mac"].getStr()
